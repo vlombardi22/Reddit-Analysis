@@ -54,23 +54,29 @@ for n in G.out_edges:
                                 if alone:
                                     instances += 1
                                     alone = False
-
-                                data3 = None
+                                check = True
                                 if G.get_edge_data(m[1], n[1]):
                                     data3 = G.get_edge_data(m[1], n[1]).values()
-
-                                elif G.get_edge_data(n[1], m[1]):
-                                    data3 = G.get_edge_data(n[1], m[1]).values()
-
-                                if data3:
                                     for d3 in data3:
-                                        id3 = d3['ID']
+                                        id3 = int(d3['ID'])
                                         time3 = time_table[id3]
                                         if time <= time3 < window2:
-                                            if data3['LINK_SENTIMENT'] == 1:
-                                                defence += 1
+                                            if d3['LINK_SENTIMENT'] == 1:
+                                                if id3 not in id_list:
+                                                    id_list.append(id3)
+                                                    defence += 1
+                                                    check = False
 
-
+                                if check and G.get_edge_data(n[1], m[1]):
+                                    data3 = G.get_edge_data(n[1], m[1]).values()
+                                    for d3 in data3:
+                                        id3 = int(d3['ID'])
+                                        time3 = time_table[id3]
+                                        if time <= time3 < window2:
+                                            if d3['LINK_SENTIMENT'] == 1:
+                                                if id3 not in id_list:
+                                                    id_list.append(id3)
+                                                    defence += 1
 print(attacktotal)
 print(jointattacks)
 print(instances)
