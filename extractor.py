@@ -10,17 +10,15 @@ out_list_P = []
 out_list_N = []
 in_list_P = []
 in_list_N = []
-out_avg_list = []
-in_avg_list = []
+
 for n in G.out_edges:
+
     data = G.get_edge_data(n[0], n[1]).values()
     for d in data:
         if d['LINK_SENTIMENT'] == 1:
             out_list_P.append(n)
-            # out_avg_list.append(n)
         elif d['LINK_SENTIMENT'] == -1:
             out_list_N.append(n)
-            # out_avg_list.append(n)
 
 for n in G.in_edges:
     data = G.get_edge_data(n[0], n[1]).values()
@@ -36,7 +34,6 @@ PI = nx.from_edgelist(in_list_P, nx.MultiDiGraph)
 NI = nx.from_edgelist(in_list_N, nx.MultiDiGraph)
 templist = []
 
-# out_avg = nx.from_edgelist(out_avg_list, nx.DiGraph)
 
 def top_ten_out(graph1, graph2, p1, p2):
     nlist = graph1.nodes(False)
@@ -57,6 +54,7 @@ def top_ten_in(graph1, graph2, p1, p2):
     altlist = {}
     for n in nlist:
         mlist[n] = int(graph1.in_degree(n))
+
     alist = graph2.nodes(False)
     for n in alist:
         altlist[n] = int(graph2.in_degree(n))
@@ -67,26 +65,19 @@ def top_ten_in(graph1, graph2, p1, p2):
 def printer(sorted_values, mlist, altlist, p1, p2):
     sorted_dict = {}
     count = 0
-    av = 0
+
     for i in sorted_values:
         for k in mlist.keys():
             if mlist[k] == i:
-                av += mlist[k]
                 count += 1
                 sorted_dict[k] = mlist[k]
                 break
-    #print(av/count)
-    #print(sorted_values)
-    #print(sorted_dict)
-    temp = []
-    for n in list(reversed(list(sorted_dict)))[0:20]:
 
+    for n in list(reversed(list(sorted_dict)))[0:20]:
 
         if n not in templist:
             templist.append(n)
         print(n, " ", p1, " ", sorted_dict[n], " ", p2, " ", altlist[n])
-    print(temp)
-
 
 
 print("out degree positive!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -97,10 +88,8 @@ print("in degree positive!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 top_ten_in(PI, NI, "positive", "negative")
 print("in degree negative!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 top_ten_in(NI, PI, "negative", "positive")
-"""
+
 print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-print(len(templist))
+print("unique subreddits from the above list")
 for n in templist:
     print(n)
-"""
-
